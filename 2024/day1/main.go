@@ -11,9 +11,15 @@ import (
 	"strconv"
 )
 
-func Solve(inputfile string) int {
-	var inputLists Lists = readInput(&inputfile)
+type Lists struct {
+	left      []int
+	right     []int
+	leftFreq  map[int]int
+	rightFreq map[int]int
+}
 
+func sortLists(inputLists *Lists) {
+	//sorts a list object's left[] and right[] values in place
 	slices.SortFunc(inputLists.left, func(a int, b int) int {
 		if a > b {
 			return 1
@@ -28,6 +34,12 @@ func Solve(inputfile string) int {
 			return -1
 		}
 	})
+}
+
+func SolveTotalDistance(inputfile string) int {
+	//solves Day 1: Part 1 (Total Distance)
+	var inputLists Lists = readInput(&inputfile)
+	sortLists(&inputLists)
 
 	i := 0
 	ans := 0
@@ -42,14 +54,28 @@ func Solve(inputfile string) int {
 	return ans
 }
 
-type Lists struct {
-	left  []int
-	right []int
+func SolveSimilarityScore(inputfile string) int {
+	//Solve similarity score by stepping through the left list and comparing
+	//each number to a frequency table on the right list
+
+	var inputLists Lists = readInput(&inputfile)
+	sortLists(&inputLists)
+	var output int
+
+	for _, v := range inputLists.left {
+		rightVal, ok := inputLists.rightFreq[v]
+
+		if ok {
+			output += v * rightVal
+		}
+	}
+
+	return output
 }
 
 func readInput(inputfile *string) Lists {
 	//takes a pointer to a string and steps through the file contents
-	//returning an array of split nums
+	//returning a 'Lists' struct with frequency and L/R array data
 	file, _ := os.Open(*inputfile)
 	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanWords)
@@ -58,6 +84,8 @@ func readInput(inputfile *string) Lists {
 
 	var l_list []int
 	var r_list []int
+	l_freq := make(map[int]int)
+	r_freq := make(map[int]int)
 
 	for scanner.Scan() {
 		item := scanner.Text()
@@ -68,8 +96,10 @@ func readInput(inputfile *string) Lists {
 
 		if count%2 == 0 {
 			l_list = append(l_list, num)
+			l_freq[num]++
 		} else {
 			r_list = append(r_list, num)
+			r_freq[num]++
 		}
 		count++
 	}
@@ -80,6 +110,8 @@ func readInput(inputfile *string) Lists {
 	var output Lists
 	output.left = l_list
 	output.right = r_list
+	output.leftFreq = l_freq
+	output.rightFreq = r_freq
 
 	return output
 }

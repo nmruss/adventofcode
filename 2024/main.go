@@ -6,5 +6,7 @@ import (
 )
 
 func main() {
-	fmt.Println(day1.Solve("day1/inputfiles/input"))
+	fmt.Println(day1.SolveTotalDistance("day1/inputfiles/testinput"))
+
+	fmt.Println(day1.SolveSimilarityScore("day1/inputfiles/input"))
 }
