@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"nmruss/adventofcode24/day4"
+	"nmruss/adventofcode24/day5"
 )
 
 func main() {
@@ -15,7 +15,10 @@ func main() {
 	//fmt.Println(day3.SolveMulOps("day3/inputfiles/testinput"))
 	//fmt.Println(day3.SolveMulOps("day3/inputfiles/input"))
 
-	fmt.Println(day4.SolveFindXmas("day4/inputfiles/testinput"))
-	fmt.Println(day4.SolveFindXmas("day4/inputfiles/input"))
+	//fmt.Println(day4.SolveFindXmas("day4/inputfiles/testinput"))
+	//fmt.Println(day4.SolveFindXmas("day4/inputfiles/input"))
 
+	ruleMap := day5.BuildRules("day5/inputfiles/ruleinput")
+	validList := day5.ValidUpdatesList("day5/inputfiles/updateinput", &ruleMap)
+	fmt.Println(day5.SolvePrintQueueNum("day5/inputfiles/updateinput", validList))
 }
