@@ -35,39 +35,47 @@ func SolveGuardPositions(inputfile string) int {
 		if d == Up {
 			if currentPos[0]-1 < 0 {
 				area[currentPos[0]][currentPos[1]] = "X"
-				tilesCrossed++
-				break
+				currentPos[0]--
+				continue
 			}
-			if area[currentPos[0]][currentPos[1]] == "." {
-				tilesCrossed++
-			}
-			area[currentPos[0]][currentPos[1]] = "X"
+
 			nextTile := area[currentPos[0]-1][currentPos[1]]
+			area[currentPos[0]][currentPos[1]] = "X"
+
 			if nextTile == "." {
 				currentPos[0]--
-			} else if nextTile == "#" {
-				d = (d + 1) % 4
-			} else if nextTile == "X" {
+				tilesCrossed++
+			}
+
+			if nextTile == "X" {
 				currentPos[0]--
+			}
+
+			if nextTile == "#" {
+				d = (d + 1) % 4
 			}
 		}
 
 		if d == Right {
 			if currentPos[1]+1 > len(area[0])-1 {
 				area[currentPos[0]][currentPos[1]] = "X"
-				tilesCrossed++
-				break
+				currentPos[1]++
+				continue
 			}
-			if area[currentPos[0]][currentPos[1]] == "." {
-				tilesCrossed++
-			}
+
 			nextTile := area[currentPos[0]][currentPos[1]+1]
 			area[currentPos[0]][currentPos[1]] = "X"
+
 			if nextTile == "." {
 				currentPos[1]++
-			} else if nextTile == "#" {
+				tilesCrossed++
+			}
+
+			if nextTile == "#" {
 				d = (d + 1) % 4
-			} else if nextTile == "X" {
+			}
+
+			if nextTile == "X" {
 				currentPos[1]++
 			}
 		}
@@ -75,19 +83,21 @@ func SolveGuardPositions(inputfile string) int {
 		if d == Down {
 			if currentPos[0]+1 > len(area)-1 {
 				area[currentPos[0]][currentPos[1]] = "X"
-				tilesCrossed++
-				break
+				currentPos[0]++
+				continue
 			}
-			if area[currentPos[0]][currentPos[1]] == "." {
-				tilesCrossed++
-			}
+
 			nextTile := area[currentPos[0]+1][currentPos[1]]
 			area[currentPos[0]][currentPos[1]] = "X"
+
 			if nextTile == "." {
 				currentPos[0]++
-			} else if nextTile == "#" {
+				tilesCrossed++
+			}
+			if nextTile == "#" {
 				d = (d + 1) % 4
-			} else if nextTile == "X" {
+			}
+			if nextTile == "X" {
 				currentPos[0]++
 			}
 		}
@@ -95,19 +105,21 @@ func SolveGuardPositions(inputfile string) int {
 		if d == Left {
 			if currentPos[1]-1 < 0 {
 				area[currentPos[0]][currentPos[1]] = "X"
-				tilesCrossed++
-				break
+				currentPos[1]--
+				continue
 			}
-			if area[currentPos[0]][currentPos[1]] == "." {
-				tilesCrossed++
-			}
-			nextTile := area[currentPos[0]][currentPos[1]-1]
+
 			area[currentPos[0]][currentPos[1]] = "X"
+			nextTile := area[currentPos[0]][currentPos[1]-1]
+
 			if nextTile == "." {
 				currentPos[1]--
-			} else if nextTile == "#" {
+				tilesCrossed++
+			}
+			if nextTile == "#" {
 				d = (d + 1) % 4
-			} else if nextTile == "X" {
+			}
+			if nextTile == "X" {
 				currentPos[1]--
 			}
 		}
@@ -119,8 +131,9 @@ func SolveGuardPositions(inputfile string) int {
 }
 
 func PrintArea(area *[][]string) {
-
-	file, err := os.Create("output.txt")
+	//prints area map output to a txt file,
+	//could be cleaned up so directory is not hard coded
+	file, err := os.Create("./day6/outputfiles/output.txt")
 	if err != nil {
 		panic(err)
 	}
