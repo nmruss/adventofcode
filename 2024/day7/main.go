@@ -57,10 +57,21 @@ func (n *Node) IsValid(target *int64) bool {
 	return n.Left.IsValid(target) || n.Right.IsValid(target)
 }
 
+func isPossible(target int64, nums []int64, current int64, index int) bool {
+	//step along the input array recursively
+	if index == 0 {
+		return isPossible(target, nums, nums[0], 1)
+	}
+
+	if index == len(nums)-1 {
+		return (current+nums[index] == target) || (current*nums[index] == target)
+	}
+
+	return isPossible(target, nums, current+nums[index], index+1) || isPossible(target, nums, current*nums[index], index+1)
+}
+
 func ReadBridgeRepairInput(inputfile *string) int64 {
-	//read each line item into a binary tree
-	//as you move along, add each result, if the next node is ever == the test value
-	//return as list of valid calibrations
+	//return a sum of valid calibrations
 	file, _ := os.Open(*inputfile)
 	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanLines)
@@ -69,33 +80,29 @@ func ReadBridgeRepairInput(inputfile *string) int64 {
 	for scanner.Scan() {
 		item := scanner.Text()
 		items := strings.Split(item, ":")
-		testValue := items[0]
+		target := items[0]
 		items[1] = strings.Trim(items[1], " ")
 		itemValues := strings.Split(items[1], " ")
-		firstItemVal, err := strconv.ParseInt(itemValues[0], 10, 64)
-		if err != nil {
-			fmt.Println(err)
-		}
-		root := Node{Value: firstItemVal}
 
-		for _, value := range itemValues[1:] {
+		var itemNums []int64
+
+		for _, value := range itemValues {
 			currValue, err := strconv.ParseInt(value, 10, 64)
 			if err != nil {
 				fmt.Println(err)
 			}
-
-			root.Insert(currValue)
+			itemNums = append(itemNums, currValue)
 		}
 
-		testVal, err := strconv.ParseInt(testValue, 10, 64)
+		targetVal, err := strconv.ParseInt(target, 10, 64)
 		if err != nil {
 			fmt.Println(err)
 		}
-		//	fmt.Println(testVal, root.IsValid(&testVal))
-		if root.IsValid(&testVal) {
-			answer += testVal
+		fmt.Println(targetVal, itemNums)
+
+		if isPossible(targetVal, itemNums, 0, 0) {
+			answer += targetVal
 		}
-		root.InOrder()
 	}
 
 	if err := scanner.Err(); err != nil {

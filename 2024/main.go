@@ -25,7 +25,7 @@ func main() {
 	//fmt.Println(day6.SolveGuardPositions("day6/inputfiles/input"))
 
 	testinputfilepath := "day7/inputfiles/testinput"
-	// inputfilepath := "day7/inputfiles/input"
+	inputfilepath := "day7/inputfiles/input"
 	fmt.Println(day7.ReadBridgeRepairInput(&testinputfilepath))
-	// fmt.Println(day7.ReadBridgeRepairInput(&inputfilepath))
+	fmt.Println(day7.ReadBridgeRepairInput(&inputfilepath))
 }
